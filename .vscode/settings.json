@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+  "explorerExclude.backup": {},
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#1d1d30",
+    "titleBar.inactiveForeground": "#1d1d30",
+    "titleBar.activeBackground": "#47cb66"
+  }
+}
