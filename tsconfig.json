@@ -19,14 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/lib/*": ["src/lib/*"],
-      "@/components/*": ["src/app/components/*"]
+      "@/*": ["./src/*"]
     },
-    "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types", "./typings"],
-    "types": ["jest", "node"]
+    "baseUrl": "./"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "cypress"]
+  "exclude": ["node_modules"]
 }
