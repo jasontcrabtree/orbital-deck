@@ -1,6 +1,6 @@
-import { Button } from "@/app/ui/components/button"
 import { UserButton } from "@clerk/nextjs"
 import Link from "next/link";
+import { Button } from "./ui/components/button";
 
 const Page = () => {
   return (
