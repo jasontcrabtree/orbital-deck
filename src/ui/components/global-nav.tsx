@@ -7,7 +7,7 @@ const GlobalNav = (): JSX.Element => {
             <ul className="w-full mx-auto p-2 px-8 flex flex-row gap-2 items-center justify-between">
                 <li>
                     <Link href="/">
-                        Home
+                        Dashboard
                     </Link>
                 </li>
                 <li>
