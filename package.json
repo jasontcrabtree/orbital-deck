@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
+    "jest:watch": "jest --watch",
     "cypress:open": "TEST_ENVIRONMENT=true npx cypress open",
     "cypress:run": "TEST_ENVIRONMENT=true npx cypress run"
   },
