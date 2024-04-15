@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './ui/globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
+import '../ui/globals.css'
+import GlobalNav from '@/ui/components/global-nav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} tw-bg-slate-100`}>{children}</body>
+        <body className={`${inter.className} bg-slate-900 text-slate-50`} style={{ background: '#080301', color: '#f37452' }}>
+          <GlobalNav />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   )

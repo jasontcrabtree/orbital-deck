@@ -9,8 +9,8 @@
   },
   "explorerExclude.backup": {},
   "workbench.colorCustomizations": {
-    "titleBar.activeForeground": "#1d1d30",
-    "titleBar.inactiveForeground": "#1d1d30",
-    "titleBar.activeBackground": "#47cb66"
+    "titleBar.activeForeground": "#95290c",
+    "titleBar.inactiveForeground": "#95290c",
+    "titleBar.activeBackground": "#060907"
   }
 }
