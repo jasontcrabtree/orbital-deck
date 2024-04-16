@@ -1,8 +1,7 @@
-const MediaEmbed = ({ mediaSrc }: { mediaSrc: string; }): JSX.Element => {
-
+const MediaEmbed = ({ mediaSrc }: { mediaSrc?: string; }): JSX.Element => {
     return (
         <>
-            <iframe src={mediaSrc}></iframe>
+            Media
         </>
     )
 }
