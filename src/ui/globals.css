@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-bg {
+  --bg-accent: #1078ff16;
+
+  background: #080301;
+  color: white;
+
+  background-position: center;
+
+  background-image: linear-gradient(var(--bg-accent) 2px, transparent 2px),
+    linear-gradient(90deg, var(--bg-accent) 2px, transparent 2px),
+    linear-gradient(var(--bg-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-accent) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px, 2px 12px, 12px 4px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}

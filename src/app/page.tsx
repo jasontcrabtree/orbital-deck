@@ -1,5 +1,3 @@
-import MediaEmbed from "@/ui/components/media-embed";
-
 const Page = () => {
   return (
     <main className="p-2 px-8">
