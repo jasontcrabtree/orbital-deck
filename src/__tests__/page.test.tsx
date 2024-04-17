@@ -33,5 +33,9 @@ Tests/functionality
 /* pagination/show more function works for long elements */
 
 /* elements can be dragged/moved on screen */
+test('Page', () => {
+    render(<Page />)
+
+})
 
 /* elements can be pinned */
