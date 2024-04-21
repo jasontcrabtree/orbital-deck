@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { closestCenter, DndContext, DragOverlay } from '@dnd-kit/core';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { DotsSix, Lock, LockOpen, PushPin, PushPinSlash } from '@phosphor-icons/react';
+import { arrayMove, rectSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const Droppable = ({ children, id }: { children: React.ReactNode, id: string }) => {
     // const { isOver, setNodeRef } = useDroppable({ id });
@@ -23,19 +25,34 @@ const Droppable = ({ children, id }: { children: React.ReactNode, id: string }) 
     );
 }
 
-const Draggable = ({ children, id }: { children: React.ReactNode, id: string }) => {
-    // const {
-    //     setNodeRef,
-    //     attributes,
-    //     listeners,
-    //     transform } = useDraggable({ id });
-    const res = useDraggable({ id });
+const SortableElement = (props) => {
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+        id: props.item.id
+    })
+    console.log('props', props);
+
+    const style = {
+        transition,
+        transform: CSS.Transform.toString(transform),
+    }
+
+    return (
+        <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+            Element {props?.item?.id}
+        </div>
+    )
+}
+
+const Draggable = ({ children, id, ...props }: { children: React.ReactNode, id: string }) => {
+    const sortable = useSortable({ id });
     const {
-        setNodeRef,
         attributes,
         listeners,
+        isDragging,
+        setNodeRef,
         transform,
-    } = res;
+        // transition,
+    } = sortable;
 
     // console.log('useDraggable returns', res)
 
@@ -44,7 +61,14 @@ const Draggable = ({ children, id }: { children: React.ReactNode, id: string }) 
     } : undefined;
 
     return (
-        <div ref={setNodeRef} className='bg-white text-slate-800 p-2 border-2 rounded border-indigo-400'>
+        <div
+            id={id}
+            ref={setNodeRef}
+            style={style}
+            {...props}
+            {...attributes}
+            {...listeners}
+            className='bg-white text-slate-800 p-2 border-2 rounded border-indigo-400'>
             <div className='flex flex-row gap-3 justify-end w-full'>
                 <button style={style} {...listeners} {...attributes}>
                     <DotsSix size={24} color="" weight="bold" />
@@ -71,108 +95,123 @@ const Draggable = ({ children, id }: { children: React.ReactNode, id: string }) 
 
 const ElementOne = () => {
     return (
-        <div>
-            <Draggable id="one">Drag me</Draggable>
-            Element one
-        </div>
+        <Draggable id="one">
+            <div>
+                Element one
+            </div>
+        </Draggable>
     )
 }
 const ElementTwo = () => {
     return (
-        <div>
-            <Draggable id="two">Drag me</Draggable>
-            Element Two
-        </div>
+        <Draggable id="two">
+            <div>
+                Drag me
+                Element Two
+            </div>
+        </Draggable>
     )
 }
 const ElementThree = () => {
     return (
-        <div>
-            <Draggable id="three">Drag me</Draggable>
-            Element Three
-        </div>
+        <Draggable id="three">
+            <div>
+                Drag me
+                Element Three
+            </div>
+        </Draggable>
     )
 }
 const ElementFour = () => {
     return (
-        <div>
-            <Draggable id="four">Drag me</Draggable>
-            Element Four
-        </div>
+        <Draggable id="four">
+            <div>
+                Drag me
+                Element Four
+            </div>
+        </Draggable>
     )
 }
 
-export const DragZone = () => {
-    const [items] = useState(
-        [
-            {
-                id: 'one',
-                component: <ElementOne />
-            },
-            {
-                id: 'two',
-                component: <ElementTwo />
-            },
-            {
-                id: 'three',
-                component: <ElementThree />
-            },
-            {
-                id: 'four',
-                component: <ElementFour />
-            },
-        ]);
+export const elementArray = [
+    {
+        id: '1',
+        component: <ElementOne />
+    },
+    {
+        id: '2',
+        component: <ElementTwo />
+    },
+    {
+        id: '3',
+        component: <ElementThree />
+    },
+    {
+        id: '4',
+        component: <ElementFour />
+    },
+];
 
-    const [parent, setParent] = useState(null);
+export const DragZone = () => {
+    const [items, setItems] = useState(elementArray);
     const [activeId, setActiveId] = useState(null);
 
-    console.log('STATE', parent, activeId)
+    function handleDragEnd(event) {
+        // console.log('items', items);
+        // const { active, over } = event;
+        // console.log("ACTIVE, OVER", active, '|', over)
 
-    const handleDragEnd = (event) => {
-        console.log('event', event)
-        const { over } = event;
-        setParent(over ? over.id : null);
+        // if (active.id !== over.id) {
+        //     setItems((items) => {
+        //         const oldIndex = items.indexOf(active.id);
+        //         const newIndex = items.indexOf(over.id);
+
+        //         return arrayMove(items, oldIndex, newIndex);
+        //     });
+        //     console.log('items', items)
+        // }
+
+        // setActiveId(null);
+        const { active, over } = event;
+        if (active.id === over.id) {
+            return
+        }
+
+        setItems((items) => {
+            const oldIndex = items.findIndex(item => item.id === active.id);
+            const newIndex = items.findIndex(item => item.id === over.id);
+
+            return arrayMove(items, oldIndex, newIndex)
+        })
     }
 
-    function handleDragStart(event) {
+    function handleDragOverlay(event) {
         setActiveId(event.active.id);
     }
 
-    // function handleDragEnd() {
-    //     setActiveId(null);
-    // }
-
-    /* onDragEnd argument takes a custom function which passes in a custom dndkit event type, which can be ?split? to over, which can include an id */
-
     return (
-        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
-            {/* If parent starts as null render drag element outside of the drop grid */}
-            {/* {parent === null ? (
-                <Draggable id="draggable">Drag me</Draggable>
-            ) : null} */}
+        <div className='flex flex-col gap-8'>
+            <DndContext onDragStart={handleDragOverlay} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]} collisionDetection={closestCenter}>
+                <SortableContext items={items} strategy={rectSortingStrategy}>
+                    <div className="grid grid-cols-2 gap-2">
+                        {items.map((item, index) => (
+                            <SortableElement key={index} item={item} />
+                        ))}
+                        {/* // return item.component
+                    // <Droppable key={index} id={item.id}>
+                    //     {item.component}
+                    // </Droppable> */}
+                    </div>
 
-            <div className="grid grid-cols-2 gap-2">
-                {items.map((item, index) => {
-                    return (
-                        <Droppable key={index} id={item.id}>
-                            {/* {parent === item ?
-                                // <Draggable id={id}>
-                                //     Drag me
-                                // </Draggable>
-                            : 'Drop here'} */}
-                            {item.component}
-                        </Droppable>
-                    )
-                })}
-            </div>
-
-            <DragOverlay>
-                {activeId ? (
-                    <Draggable id={activeId}>
-                        Drag me [{activeId}]
-                    </Draggable>
-                ) : null}
-            </DragOverlay>
-        </DndContext>
+                    {/* <DragOverlay>
+                        {activeId ? (
+                            <Draggable id={activeId}>
+                                Drag me [{activeId}]
+                            </Draggable>
+                        ) : null}
+                    </DragOverlay> */}
+                </SortableContext>
+            </DndContext>
+        </div>
     );
 }
